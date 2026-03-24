@@ -56,7 +56,7 @@ export default function Dashboard() {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <Card>
           <CardContent>
             <p className="text-2xl font-mono font-bold text-accent">
@@ -89,7 +89,7 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Top Opportunities */}
         <div>
           <h2 className="text-sm font-mono font-semibold text-text-primary mb-3">

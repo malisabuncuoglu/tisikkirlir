@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Digital Opportunity Cockpit
 
-## Getting Started
+A personal founder research agent and opportunity scoring engine. Internal tool for detecting, filtering, scoring, and prioritizing digital business opportunities.
 
-First, run the development server:
+**Not a SaaS. Not a product. A founder's workbench.**
+
+## Stack
+
+- **Framework:** Next.js 16 (App Router, TypeScript)
+- **Database:** SQLite via better-sqlite3 + Drizzle ORM
+- **AI:** Anthropic Claude API (claude-sonnet-4-5)
+- **Styling:** Tailwind CSS (dark workbench theme)
+- **Export:** Markdown (.md) downloads
+
+## Setup
 
 ```bash
+# 1. Install dependencies
+npm install
+
+# 2. Create environment file
+cp .env.example .env.local
+# Edit .env.local and add your Anthropic API key
+
+# 3. Initialize database
+npx drizzle-kit push
+
+# 4. Seed demo data (optional)
+npx tsx db/seed.ts
+
+# 5. Run
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Description | Required |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | Your Anthropic API key | Yes (for AI features) |
+| `DATABASE_PATH` | Path to SQLite database file | No (defaults to `./db/cockpit.db`) |
 
-## Learn More
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+### Signals Inbox
+Capture market signals from Reddit, X, ProductHunt, Google, App Store, or manual entry. Filter by source, strength, status. Convert signals to opportunities or dismiss them.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Opportunities
+Full lifecycle management: create, filter, score, deep dive, prep doc, PRD candidate. Kill or archive opportunities. Restore from archive.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Scoring Engine
+8-dimension weighted scoring system:
+- Pain Severity (18%)
+- Monetization Fit (16%)
+- Demand Visibility (14%)
+- Distribution Fit (14%)
+- Competitive Wedge (12%)
+- MVP Feasibility (10%)
+- Retention Potential (8%)
+- Founder Fit (8%)
 
-## Deploy on Vercel
+Verdicts: **BUILD THESIS** (80+) | **EXPLORE** (65-79) | **WATCHLIST** (50-64) | **IGNORE** (<50)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### AI Generation
+All powered by Claude API:
+- **Deep Dive:** 10-lens analysis of an opportunity
+- **Prep Doc:** Comprehensive preparation document (14 sections)
+- **PRD:** Full product requirements document (20 sections)
+- **Weekly Report:** Signal summary, opportunity ranking, founder memo
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Export
+All generated content can be exported as `.md` files.
+
+## Keyboard Shortcuts
+
+| Key | Action |
+|---|---|
+| `Cmd+K` | Quick add signal |
+| `1` | Go to Dashboard |
+| `2` | Go to Signals |
+| `3` | Go to Opportunities |
+| `4` | Go to Reports |
+| `5` | Go to Archive |
+| `?` | Show shortcuts help |
+
+## Project Structure
+
+```
+app/                    Next.js pages (App Router)
+  signals/              Signals inbox + detail
+  opportunities/        Opportunity list + detail
+  reports/              Reports list + detail
+  archive/              Killed/archived opportunities
+actions/                Server Actions (CRUD + AI generation)
+components/             React components
+  ui/                   Primitives (button, badge, card, modal, etc.)
+  signals/              Signal-specific components
+  opportunities/        Opportunity-specific components
+  scoring/              Scoring panel
+  reports/              Report generation modal
+db/
+  schema.ts             Drizzle ORM schema (7 tables)
+  seed.ts               Demo data seeder
+lib/
+  db.ts                 Database singleton
+  scoring.ts            Weighted scoring engine
+  anthropic.ts          AI client + system prompt
+  export.ts             Markdown export utility
+  prompts/              AI prompt builders
+```
+
+## Design
+
+Dark workbench aesthetic. Every pixel serves a decision. No marketing, no fluff.
+
+- Background: `#0a0a0a`
+- Accent: `#e8ff47` (signal yellow)
+- Monospace-first typography
+
+---
+
+> "Bana internetin gurultusunu degil, kucuk ekipli ve satilabilir dijital is firsatlarini getir."

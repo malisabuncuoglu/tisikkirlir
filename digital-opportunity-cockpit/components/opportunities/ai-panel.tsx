@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MarkdownRenderer } from "@/components/ui/markdown-renderer";
+import { useToast } from "@/components/ui/toast";
 import { downloadMarkdown } from "@/lib/export";
 import {
   generateDeepDive,
@@ -64,6 +65,7 @@ function DeepDiveSection({
     deepDives[deepDives.length - 1]?.content_markdown || ""
   );
   const [error, setError] = useState("");
+  const { toast } = useToast();
 
   async function handleGenerate() {
     setLoading(true);
@@ -71,10 +73,21 @@ function DeepDiveSection({
     try {
       const result = await generateDeepDive(opportunityId);
       setContent(result);
+      toast("Deep dive generated");
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Generation failed");
+      const msg = e instanceof Error ? e.message : "Generation failed";
+      setError(msg);
+      toast(msg, "error");
     }
     setLoading(false);
+  }
+
+  function handleExport() {
+    downloadMarkdown(
+      content,
+      `deep-dive-${opportunityTitle.toLowerCase().replace(/\s+/g, "-")}.md`
+    );
+    toast("Exported as .md");
   }
 
   return (
@@ -82,51 +95,26 @@ function DeepDiveSection({
       <CardContent>
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <h2 className="text-xs font-mono font-semibold text-text-secondary">
-              Deep Dive
-            </h2>
-            {deepDives.length > 0 && (
-              <Badge variant="muted">v{deepDives.length}</Badge>
-            )}
+            <h2 className="text-xs font-mono font-semibold text-text-secondary">Deep Dive</h2>
+            {deepDives.length > 0 && <Badge variant="muted">v{deepDives.length}</Badge>}
           </div>
           <div className="flex gap-2">
             {content && (
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() =>
-                  downloadMarkdown(
-                    content,
-                    `deep-dive-${opportunityTitle.toLowerCase().replace(/\s+/g, "-")}.md`
-                  )
-                }
-              >
+              <Button size="sm" variant="ghost" onClick={handleExport}>
                 Export .md
               </Button>
             )}
-            <Button
-              size="sm"
-              variant="accent"
-              onClick={handleGenerate}
-              disabled={loading}
-            >
-              {loading
-                ? "Generating..."
-                : deepDives.length > 0
-                ? "Regenerate"
-                : "Generate Deep Dive"}
+            <Button size="sm" variant="accent" onClick={handleGenerate} disabled={loading}>
+              {loading ? "Generating..." : deepDives.length > 0 ? "Regenerate" : "Generate Deep Dive"}
             </Button>
           </div>
         </div>
-        {error && (
-          <p className="text-xs font-mono text-danger mb-2">{error}</p>
-        )}
+        {error && <p className="text-xs font-mono text-danger mb-2">{error}</p>}
         {content ? (
           <MarkdownRenderer content={content} />
         ) : (
           <p className="text-xs font-mono text-text-secondary py-8 text-center">
-            No deep dive yet. Click &quot;Generate Deep Dive&quot; to analyze
-            this opportunity.
+            No deep dive yet. Click &quot;Generate Deep Dive&quot; to analyze this opportunity.
           </p>
         )}
       </CardContent>
@@ -147,6 +135,7 @@ function PrepDocSection({
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState(latest?.content_markdown || "");
   const [error, setError] = useState("");
+  const { toast } = useToast();
 
   async function handleGenerate() {
     setLoading(true);
@@ -154,10 +143,21 @@ function PrepDocSection({
     try {
       const result = await generatePrepDoc(opportunityId);
       setContent(result);
+      toast("Prep doc generated");
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Generation failed");
+      const msg = e instanceof Error ? e.message : "Generation failed";
+      setError(msg);
+      toast(msg, "error");
     }
     setLoading(false);
+  }
+
+  function handleExport() {
+    downloadMarkdown(
+      content,
+      `prep-doc-${opportunityTitle.toLowerCase().replace(/\s+/g, "-")}.md`
+    );
+    toast("Exported as .md");
   }
 
   return (
@@ -165,20 +165,12 @@ function PrepDocSection({
       <CardContent>
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <h2 className="text-xs font-mono font-semibold text-text-secondary">
-              Prep Doc
-            </h2>
-            {prepDocs.length > 0 && (
-              <Badge variant="muted">v{prepDocs.length}</Badge>
-            )}
+            <h2 className="text-xs font-mono font-semibold text-text-secondary">Prep Doc</h2>
+            {prepDocs.length > 0 && <Badge variant="muted">v{prepDocs.length}</Badge>}
             {latest?.completeness_score != null && (
               <Badge
                 variant={
-                  latest.completeness_score >= 80
-                    ? "success"
-                    : latest.completeness_score >= 50
-                    ? "warning"
-                    : "danger"
+                  latest.completeness_score >= 80 ? "success" : latest.completeness_score >= 50 ? "warning" : "danger"
                 }
               >
                 {latest.completeness_score}% complete
@@ -187,42 +179,21 @@ function PrepDocSection({
           </div>
           <div className="flex gap-2">
             {content && (
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() =>
-                  downloadMarkdown(
-                    content,
-                    `prep-doc-${opportunityTitle.toLowerCase().replace(/\s+/g, "-")}.md`
-                  )
-                }
-              >
+              <Button size="sm" variant="ghost" onClick={handleExport}>
                 Export .md
               </Button>
             )}
-            <Button
-              size="sm"
-              variant="accent"
-              onClick={handleGenerate}
-              disabled={loading}
-            >
-              {loading
-                ? "Generating..."
-                : prepDocs.length > 0
-                ? "Regenerate"
-                : "Generate Prep Doc"}
+            <Button size="sm" variant="accent" onClick={handleGenerate} disabled={loading}>
+              {loading ? "Generating..." : prepDocs.length > 0 ? "Regenerate" : "Generate Prep Doc"}
             </Button>
           </div>
         </div>
-        {error && (
-          <p className="text-xs font-mono text-danger mb-2">{error}</p>
-        )}
+        {error && <p className="text-xs font-mono text-danger mb-2">{error}</p>}
         {content ? (
           <MarkdownRenderer content={content} />
         ) : (
           <p className="text-xs font-mono text-text-secondary py-8 text-center">
-            No prep doc yet. Generate a deep dive first, then create the prep
-            doc.
+            No prep doc yet. Generate a deep dive first, then create the prep doc.
           </p>
         )}
       </CardContent>
@@ -242,10 +213,9 @@ function PRDSection({
   hasPrepDoc: boolean;
 }) {
   const [loading, setLoading] = useState(false);
-  const [content, setContent] = useState(
-    prds[prds.length - 1]?.content_markdown || ""
-  );
+  const [content, setContent] = useState(prds[prds.length - 1]?.content_markdown || "");
   const [error, setError] = useState("");
+  const { toast } = useToast();
 
   async function handleGenerate() {
     setLoading(true);
@@ -253,10 +223,21 @@ function PRDSection({
     try {
       const result = await generatePRD(opportunityId);
       setContent(result);
+      toast("PRD generated");
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Generation failed");
+      const msg = e instanceof Error ? e.message : "Generation failed";
+      setError(msg);
+      toast(msg, "error");
     }
     setLoading(false);
+  }
+
+  function handleExport() {
+    downloadMarkdown(
+      content,
+      `prd-${opportunityTitle.toLowerCase().replace(/\s+/g, "-")}.md`
+    );
+    toast("Exported as .md");
   }
 
   return (
@@ -264,39 +245,17 @@ function PRDSection({
       <CardContent>
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <h2 className="text-xs font-mono font-semibold text-text-secondary">
-              PRD
-            </h2>
-            {prds.length > 0 && (
-              <Badge variant="muted">v{prds.length}</Badge>
-            )}
+            <h2 className="text-xs font-mono font-semibold text-text-secondary">PRD</h2>
+            {prds.length > 0 && <Badge variant="muted">v{prds.length}</Badge>}
           </div>
           <div className="flex gap-2">
             {content && (
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() =>
-                  downloadMarkdown(
-                    content,
-                    `prd-${opportunityTitle.toLowerCase().replace(/\s+/g, "-")}.md`
-                  )
-                }
-              >
+              <Button size="sm" variant="ghost" onClick={handleExport}>
                 Export .md
               </Button>
             )}
-            <Button
-              size="sm"
-              variant="accent"
-              onClick={handleGenerate}
-              disabled={loading || !hasPrepDoc}
-            >
-              {loading
-                ? "Generating..."
-                : prds.length > 0
-                ? "Regenerate PRD"
-                : "Generate PRD"}
+            <Button size="sm" variant="accent" onClick={handleGenerate} disabled={loading || !hasPrepDoc}>
+              {loading ? "Generating..." : prds.length > 0 ? "Regenerate PRD" : "Generate PRD"}
             </Button>
           </div>
         </div>
@@ -305,9 +264,7 @@ function PRDSection({
             Generate a Prep Doc first before creating a PRD.
           </p>
         )}
-        {error && (
-          <p className="text-xs font-mono text-danger mb-2">{error}</p>
-        )}
+        {error && <p className="text-xs font-mono text-danger mb-2">{error}</p>}
         {content ? (
           <MarkdownRenderer content={content} />
         ) : (

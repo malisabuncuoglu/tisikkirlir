@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/toast";
 import { generateWeeklyReport } from "@/actions/generate";
 import type { Signal, Opportunity } from "@/db/schema";
 
@@ -46,6 +47,7 @@ function GenerateReportModal({
     opportunities.map((o) => o.id)
   );
   const [error, setError] = useState("");
+  const { toast } = useToast();
 
   const today = new Date().toISOString().split("T")[0];
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
@@ -65,9 +67,12 @@ function GenerateReportModal({
         signalIds: selectedSignals,
         opportunityIds: selectedOpps,
       });
+      toast("Report generated");
       onClose();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Generation failed");
+      const msg = e instanceof Error ? e.message : "Generation failed";
+      setError(msg);
+      toast(msg, "error");
     }
     setLoading(false);
   }

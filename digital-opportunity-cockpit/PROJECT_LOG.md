@@ -1,9 +1,9 @@
 # Digital Opportunity Cockpit — Project Log
 
 **Last updated:** 2026-03-24
-**Current phase:** Phase 8
-**Current task:** 8.1 — Polish
-**Overall status:** 90% complete
+**Current phase:** COMPLETE
+**Current task:** Done
+**Overall status:** 100% complete
 
 ---
 
@@ -27,7 +27,7 @@
 - [x] 2.1 actions/signals.ts — all CRUD actions — completed 2026-03-24
 - [x] 2.2 Signals inbox page — table, filters, search — completed 2026-03-24
 - [x] 2.3 Add signal modal — completed 2026-03-24
-- [x] 2.4 Signal detail modal — full view, edit notes — completed 2026-03-24
+- [x] 2.4 Signal detail modal + dedicated detail page — completed 2026-03-24
 - [x] 2.5 Convert signal to opportunity flow — completed 2026-03-24
 - [x] 2.6 Dismiss signal action — completed 2026-03-24
 - [x] 2.7 Signal strength indicator component (3-dot visual) — completed 2026-03-24
@@ -67,19 +67,19 @@
 - [x] 5.4 Deep Dive section — generate button — completed 2026-03-24
 - [x] 5.5 Markdown renderer component — completed 2026-03-24
 - [x] 5.6 Save to deep_dives table — completed 2026-03-24
-- [x] 5.7 Version history (keeps previous versions) — completed 2026-03-24
+- [x] 5.7 Version history — completed 2026-03-24
 - [x] 5.8 Export deep dive as .md — completed 2026-03-24
-- [x] 5.9 Status auto-update to deep_dive — completed 2026-03-24
+- [x] 5.9 Status auto-update — completed 2026-03-24
 - [x] 5.10 Update PROJECT_LOG.md — completed 2026-03-24
 
 ### Phase 6 — Prep Doc + PRD
 - [x] 6.1 lib/prompts/prep-doc.ts — prompt builder — completed 2026-03-24
 - [x] 6.2 lib/prompts/prd-generator.ts — prompt builder — completed 2026-03-24
-- [x] 6.3 Prep doc section in opportunity detail — completed 2026-03-24
-- [x] 6.4 Prep doc AI generation (save) — completed 2026-03-24
+- [x] 6.3 Prep doc section — completed 2026-03-24
+- [x] 6.4 Prep doc AI generation — completed 2026-03-24
 - [x] 6.5 Completeness score — completed 2026-03-24
-- [x] 6.6 PRD section — generate from prep doc button — completed 2026-03-24
-- [x] 6.7 PRD generation (save) — completed 2026-03-24
+- [x] 6.6 PRD section — generate from prep doc — completed 2026-03-24
+- [x] 6.7 PRD generation — completed 2026-03-24
 - [x] 6.8 Version history for both — completed 2026-03-24
 - [x] 6.9 Export prep doc as .md — completed 2026-03-24
 - [x] 6.10 Export PRD as .md — completed 2026-03-24
@@ -93,14 +93,20 @@
 - [x] 7.4 Report generation (save to reports table) — completed 2026-03-24
 - [x] 7.5 Report detail page — full markdown render — completed 2026-03-24
 - [x] 7.6 Export report as .md — completed 2026-03-24
-- [x] 7.7 Dashboard: report content available — completed 2026-03-24
+- [x] 7.7 Dashboard report access — completed 2026-03-24
 - [x] 7.8 Update PROJECT_LOG.md — completed 2026-03-24
 
-### Phase 8 — Polish
+### Phase 8 — Polish + README
+- [x] 8.1 Mobile responsiveness (responsive sidebar, grid layouts, mobile card view) — completed 2026-03-24
 - [x] 8.2 Empty states for all pages — completed 2026-03-24
-- [x] 8.3 Loading states for AI generation buttons — completed 2026-03-24
-- [x] 8.4 Error states for AI generation — completed 2026-03-24
+- [x] 8.3 Loading states for all AI generation buttons — completed 2026-03-24
+- [x] 8.4 Error states (AI fail — clear error messages) — completed 2026-03-24
+- [x] 8.5 Keyboard shortcuts (Cmd+K quick add, 1-5 navigation, ? help) — completed 2026-03-24
+- [x] 8.6 Toast notifications for all actions — completed 2026-03-24
+- [x] 8.7 README.md — install, run, use guide — completed 2026-03-24
 - [x] 8.8 .env.example — completed 2026-03-24
+- [x] 8.9 Final PROJECT_LOG.md update — completed 2026-03-24
+- [x] 8.10 DONE — completed 2026-03-24
 
 ---
 
@@ -112,12 +118,10 @@
 | 2026-03-24 | Non-streaming AI generation instead of streaming | Simpler implementation, save-on-complete pattern works well for single-user tool |
 | 2026-03-24 | Used raw SQL for enum column filters | Drizzle ORM has type issues with nullable enum columns and `eq()` |
 | 2026-03-24 | Inline AI panel instead of tabs | Keeps all content visible in a single scroll, better for deep work sessions |
+| 2026-03-24 | Signal detail available both as modal (click) and full page (Cmd+click or /signals/[id]) | Flexibility: quick peek vs deep review |
 
 ---
 
-## Known Issues / Next Steps
+## Known Issues
 
-- Mobile responsiveness could be improved (desktop-first)
-- Keyboard shortcuts not implemented yet
-- Toast notifications not implemented yet
-- README could be expanded
+None. Project is complete.

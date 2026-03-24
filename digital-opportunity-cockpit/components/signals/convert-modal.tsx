@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea, Select } from "@/components/ui/input";
+import { useToast } from "@/components/ui/toast";
 import { convertToOpportunity } from "@/actions/signals";
 import type { Signal } from "@/db/schema";
 
@@ -15,16 +16,22 @@ interface Props {
 
 export function ConvertToOpportunityModal({ signal, open, onClose }: Props) {
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     const form = new FormData(e.currentTarget);
-    await convertToOpportunity(signal.id, {
-      title: form.get("title") as string,
-      category: form.get("category") as string,
-      short_description: form.get("short_description") as string,
-    });
+    try {
+      await convertToOpportunity(signal.id, {
+        title: form.get("title") as string,
+        category: form.get("category") as string,
+        short_description: form.get("short_description") as string,
+      });
+      toast("Converted to opportunity");
+    } catch {
+      toast("Conversion failed", "error");
+    }
     setLoading(false);
     onClose();
   }
@@ -32,12 +39,7 @@ export function ConvertToOpportunityModal({ signal, open, onClose }: Props) {
   return (
     <Modal open={open} onClose={onClose} title="Convert to Opportunity">
       <form onSubmit={handleSubmit} className="space-y-3">
-        <Input
-          name="title"
-          label="Opportunity Title"
-          required
-          defaultValue={signal.title}
-        />
+        <Input name="title" label="Opportunity Title" required defaultValue={signal.title} />
         <Select
           name="category"
           label="Category"
@@ -58,9 +60,7 @@ export function ConvertToOpportunityModal({ signal, open, onClose }: Props) {
           placeholder="Brief description of the opportunity..."
         />
         <div className="flex justify-end gap-2 pt-2">
-          <Button type="button" variant="ghost" onClick={onClose}>
-            Cancel
-          </Button>
+          <Button type="button" variant="ghost" onClick={onClose}>Cancel</Button>
           <Button type="submit" variant="accent" disabled={loading}>
             {loading ? "Converting..." : "Convert"}
           </Button>

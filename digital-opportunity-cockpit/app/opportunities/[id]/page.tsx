@@ -77,9 +77,9 @@ export default async function OpportunityDetailPage({
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left panel */}
-        <div className="col-span-1 space-y-4">
+        <div className="lg:col-span-1 space-y-4">
           <Card>
             <CardContent>
               <h1 className="text-sm font-mono font-bold text-text-primary mb-3">
@@ -189,7 +189,7 @@ export default async function OpportunityDetailPage({
         </div>
 
         {/* Right panel */}
-        <div className="col-span-2 space-y-4">
+        <div className="lg:col-span-2 space-y-4">
           {/* Overview */}
           <Card>
             <CardContent>

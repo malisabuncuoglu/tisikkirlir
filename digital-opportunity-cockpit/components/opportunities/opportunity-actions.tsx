@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 import { Textarea } from "@/components/ui/input";
+import { useToast } from "@/components/ui/toast";
 import { killOpportunity, archiveOpportunity, restoreOpportunity } from "@/actions/opportunities";
 import { useRouter } from "next/navigation";
 
@@ -11,12 +12,14 @@ export function KillButton({ id }: { id: string }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   async function handleKill(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     const form = new FormData(e.currentTarget);
     await killOpportunity(id, form.get("reason") as string);
+    toast("Opportunity killed");
     setLoading(false);
     setOpen(false);
     router.push("/opportunities");
@@ -30,15 +33,9 @@ export function KillButton({ id }: { id: string }) {
       {open && (
         <Modal open={open} onClose={() => setOpen(false)} title="Kill Opportunity">
           <form onSubmit={handleKill} className="space-y-3">
-            <Textarea
-              name="reason"
-              label="Reason (optional)"
-              placeholder="Why is this being killed?"
-            />
+            <Textarea name="reason" label="Reason (optional)" placeholder="Why is this being killed?" />
             <div className="flex justify-end gap-2">
-              <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
-                Cancel
-              </Button>
+              <Button type="button" variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
               <Button type="submit" variant="danger" disabled={loading}>
                 {loading ? "Killing..." : "Confirm Kill"}
               </Button>
@@ -52,8 +49,10 @@ export function KillButton({ id }: { id: string }) {
 
 export function ArchiveButton({ id }: { id: string }) {
   const router = useRouter();
+  const { toast } = useToast();
   async function handleArchive() {
     await archiveOpportunity(id);
+    toast("Opportunity archived");
     router.push("/opportunities");
   }
   return (
@@ -65,8 +64,10 @@ export function ArchiveButton({ id }: { id: string }) {
 
 export function RestoreButton({ id }: { id: string }) {
   const router = useRouter();
+  const { toast } = useToast();
   async function handleRestore() {
     await restoreOpportunity(id);
+    toast("Opportunity restored");
     router.refresh();
   }
   return (
